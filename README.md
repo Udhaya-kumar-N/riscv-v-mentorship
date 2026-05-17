@@ -1,6 +1,6 @@
 # RISC-V Instruction Set Explorer
 
-A comprehensive JavaScript/Python solution for analyzing and cross-referencing RISC-V instruction sets with official documentation.
+A comprehensive JavaScript solution for analyzing and cross-referencing RISC-V instruction sets with official documentation.
 
 ## 📋 Project Overview
 
@@ -54,26 +54,11 @@ rv_m           |  12   | MUL
 ## 🚀 Quick Start
 
 ### Prerequisites
-- **Python 3.8+** or **Node.js 14+**
+- **Node.js 14+**
 - Git (for cloning required repositories)
 
 ### Installation
 
-#### Python Setup
-```bash
-# Clone this repository
-git clone https://github.com/Udhaya-kumar-N/riscv-v-mentorship.git
-cd riscv-v-mentorship
-
-# Create virtual environment
-python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-```
-
-#### JavaScript/Node Setup
 ```bash
 # Clone this repository
 git clone https://github.com/Udhaya-kumar-N/riscv-v-mentorship.git
@@ -85,18 +70,6 @@ npm install
 
 ### Running the Program
 
-#### Python
-```bash
-# Run all tiers
-python3 main.py
-
-# Run specific tier
-python3 main.py --tier 1
-python3 main.py --tier 2
-python3 main.py --tier 3
-```
-
-#### JavaScript
 ```bash
 # Run all tiers
 node main.js
@@ -108,19 +81,6 @@ node main.js --tier 2
 
 ### Running Tests
 
-#### Python
-```bash
-# Run all tests
-python3 -m pytest tests/ -v
-
-# Run specific test file
-python3 -m pytest tests/test_parsing.py -v
-
-# Run with coverage
-python3 -m pytest tests/ --cov=src --cov-report=html
-```
-
-#### JavaScript
 ```bash
 # Run all tests
 npm test
@@ -134,25 +94,22 @@ npm run test:coverage
 ```
 riscv-v-mentorship/
 ├── README.md                    # This file
-├── requirements.txt             # Python dependencies
 ├── package.json                 # Node.js dependencies
-├── main.py                      # Main Python entry point
 ├── main.js                      # Main JavaScript entry point
 ├── src/
 │   ├── tier1/
-│   │   ├── parser.py           # Instruction parsing logic
-│   │   ├── parser.js           # JavaScript version
-│   │   └── formatter.py        # Output formatting
+│   │   ├── parser.js           # Instruction parsing logic
+│   │   └── formatter.js        # Output formatting
 │   ├── tier2/
-│   │   ├── cross_reference.py  # Cross-reference logic
-│   │   ├── normalizer.py       # Extension name normalization
-│   │   └── manual_scanner.py   # ISA manual scanning
+│   │   ├── cross_reference.js  # Cross-reference logic
+│   │   ├── normalizer.js       # Extension name normalization
+│   │   └── manual_scanner.js   # ISA manual scanning
 │   └── tier3/
-│       └── utils.py            # Shared utilities
+│       └── utils.js            # Shared utilities
 ├── tests/
-│   ├── test_parsing.py         # Tier 1 tests
-│   ├── test_cross_reference.py # Tier 2 tests
-│   ├── test_normalizer.py      # Normalization tests
+│   ├── test_parsing.js         # Tier 1 tests
+│   ├── test_cross_reference.js # Tier 2 tests
+│   ├── test_normalizer.js      # Normalization tests
 │   └── fixtures/
 │       ├── sample_instr.json   # Sample instruction data
 │       └── sample_manual/      # Sample manual files
@@ -167,7 +124,7 @@ riscv-v-mentorship/
 
 ### Example 1: Parse Instructions and Generate Summary
 ```bash
-python3 main.py
+node main.js
 ```
 
 **Output:**
@@ -194,7 +151,7 @@ Multi-Extension Instructions:
 
 ### Example 2: Cross-Reference with ISA Manual
 ```bash
-python3 main.py --tier 2
+node main.js --tier 2
 ```
 
 **Output:**
@@ -273,15 +230,14 @@ All three tiers include comprehensive unit tests:
 
 ```bash
 # Run all tests with verbose output
-pytest tests/ -v --tb=short
+npm test -- --verbose
 
 # Run specific tier tests
-pytest tests/test_parsing.py -v
-pytest tests/test_cross_reference.py -v
+npm test -- test_parsing.js
+npm test -- test_cross_reference.js
 
 # Generate coverage report
-pytest tests/ --cov=src --cov-report=html
-open htmlcov/index.html
+npm run test:coverage
 ```
 
 ## 🔗 External Resources
@@ -294,7 +250,7 @@ open htmlcov/index.html
 
 ### Tier 1 - Parsing
 - Uses streaming JSON parser for memory efficiency with large datasets
-- Groups instructions using dictionary/map data structures
+- Groups instructions using Map and Set data structures
 - Handles edge cases: missing tags, null values, duplicates
 
 ### Tier 2 - Cross-Reference
@@ -304,7 +260,7 @@ open htmlcov/index.html
 - Provides detailed mismatch analysis
 
 ### Tier 3 - Testing & Bonus
-- Pytest for Python; Jest for JavaScript
+- Jest for testing framework
 - Fixture data for reproducible testing
 - Mock repositories for isolated testing
 - Integration tests for end-to-end validation
