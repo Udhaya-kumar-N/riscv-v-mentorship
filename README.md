@@ -1,6 +1,6 @@
 # RISC-V Instruction Set Explorer
 
-A JavaScript solution for the RISC-V Mentorship Coding Challenge — **all three tiers** implemented.
+A JavaScript solution for the RISC-V Mentorship Coding Challenge — **Tier 1 & Tier 2** implemented.
 
 ## Features
 
@@ -8,7 +8,6 @@ A JavaScript solution for the RISC-V Mentorship Coding Challenge — **all three
 |------|-------------|
 | **Tier 1** | Parse `instr_dict.json`, group instructions by extension, print summary table, list multi-extension instructions |
 | **Tier 2** | Scan ISA manual AsciiDoc sources, normalize extension names (`rv_zba` ↔ `Zba`), cross-reference and report matches/mismatches |
-| **Tier 3** | Unit tests (plain Node.js, no framework), interactive vis.js extension-sharing graph, text-based adjacency output |
 
 ---
 
@@ -42,23 +41,11 @@ cp -r riscv-isa-manual/src data/
 ## Running
 
 ```bash
-# Run all tiers with defaults
+# Run both tiers with defaults
 node src/index.js
 
 # Custom paths
-node src/index.js --instr ./instr_dict.json --isa-src ./data/src --graph-out ./output/extension-graph.html
-```
-
-After running, open `output/extension-graph.html` in a browser for the interactive graph.
-
----
-
-## Run Tests
-
-```bash
-npm test
-# or
-node tests/parser.test.js
+node src/index.js --instr ./instr_dict.json --isa-src ./data/src
 ```
 
 ---
@@ -108,16 +95,6 @@ rv_d                              26  FADD_D
   zba zbb zbc zbkb zbkc zbkx zbs
   zicsr zifencei zicond ...
 
-==============================================================
-  TIER 3 — Extension Sharing Graph (text)
-==============================================================
-  rv_zbb  ── rv_zkn(5), rv_zks(5), rv_zk(5), rv_zbkb(5)
-  rv_zvkn ── rv_zvkned(11), rv_zvknha(3), rv_zvknhb(3)
-  ...
-  Total edges: 57
-
-  ✅ Interactive graph saved to: output/extension-graph.html
-
 ✅ Done.
 ```
 
@@ -131,14 +108,9 @@ riscv-v-mentorship/
 ├── data/
 │   └── src/                    ← ISA manual adoc files (clone separately, see Setup)
 ├── src/
-│   ├── index.js                ← entry point (runs all tiers)
+│   ├── index.js                ← entry point (runs Tier 1 & Tier 2)
 │   ├── parser.js               ← Tier 1: parse & group instructions
-│   ├── crossref.js             ← Tier 2: adoc scan & cross-reference
-│   └── graph.js                ← Tier 3: text graph + vis.js HTML graph
-├── tests/
-│   └── parser.test.js          ← Tier 3: unit tests (plain Node.js)
-├── output/
-│   └── extension-graph.html    ← generated at runtime
+│   └── crossref.js             ← Tier 2: adoc scan & cross-reference
 └── package.json
 ```
 
@@ -149,8 +121,7 @@ riscv-v-mentorship/
 - **Normalization**: JSON extensions use `rv[32|64]_<name>` format; manual uses capitalized `Zba`/`Zicsr` style. Both sides are stripped to bare lowercase (e.g., `rv64_zba` → `zba`, `Zba` → `zba`) for comparison.
 - **Composite extension keys**: Names like `rv_zfh_zfa` (combining two sub-extensions) are treated as a single JSON-only entry since no exact manual equivalent exists.
 - **adoc scanning**: Uses both filename-based detection (reliable) and regex content scanning (for mentions inside documents) to maximize recall while filtering common English words.
-- **Graph edges**: Two extensions are connected if they share ≥1 instruction. Edge weight equals the count of shared instructions.
-- **No external dependencies**: All logic uses only Node.js built-ins (`fs`, `path`, `assert`). The graph HTML uses vis-network via CDN.
+- **No external dependencies**: All logic uses only Node.js built-ins (`fs`, `path`).
 
 ---
 
@@ -168,5 +139,5 @@ MIT — see [LICENSE](LICENSE)
 
 ---
 
-**Status**: ✅ All Three Tiers Complete  
+**Status**: ✅ Tier 1 & Tier 2 Complete  
 **Last Updated**: 2026-05-17

@@ -1,22 +1,20 @@
 #!/usr/bin/env node
 /**
  * RISC-V Instruction Set Explorer — Entry Point
- * Mentorship Coding Challenge: All Tiers
+ * Mentorship Coding Challenge: Tier 1 & Tier 2
  *
  * Usage:
- *   node src/index.js [--instr <path>] [--isa-src <dir>] [--graph-out <file>]
+ *   node src/index.js [--instr <path>] [--isa-src <dir>]
  *
  * Defaults:
  *   --instr     ./instr_dict.json
  *   --isa-src   ./data/src          (ISA manual adoc sources)
- *   --graph-out ./output/extension-graph.html
  */
 
 const path = require('path');
 const fs   = require('fs');
 const { parseInstrDict, printSummaryTable, printMultiExtInstructions } = require('./parser');
 const { scanAdocFiles, printCrossRefReport } = require('./crossref');
-const { buildExtensionGraph, printTextGraph, generateVisGraph } = require('./graph');
 
 // ── CLI args ──────────────────────────────────────────────────────────────────
 const args = process.argv.slice(2);
@@ -25,9 +23,8 @@ function getArg(flag, def) {
   return (i !== -1 && args[i + 1]) ? args[i + 1] : def;
 }
 
-const instrPath = getArg('--instr',     path.join(__dirname, '..', 'instr_dict.json'));
-const isaSrcDir = getArg('--isa-src',   path.join(__dirname, '..', 'data', 'src'));
-const graphOut  = getArg('--graph-out', path.join(__dirname, '..', 'output', 'extension-graph.html'));
+const instrPath = getArg('--instr',   path.join(__dirname, '..', 'instr_dict.json'));
+const isaSrcDir = getArg('--isa-src', path.join(__dirname, '..', 'data', 'src'));
 
 // ── Tier 1 ────────────────────────────────────────────────────────────────────
 console.log(`\nLoading: ${instrPath}`);
@@ -52,10 +49,5 @@ if (!fs.existsSync(isaSrcDir)) {
   console.log(`  → Found ${manualExts.size} extension references in manual`);
   printCrossRefReport(extMap, manualExts);
 }
-
-// ── Tier 3 ────────────────────────────────────────────────────────────────────
-const graph = buildExtensionGraph(extMap, multiExtInstrs);
-printTextGraph(graph, multiExtInstrs);
-generateVisGraph(extMap, multiExtInstrs, graphOut);
 
 console.log('\n✅ Done.\n');
