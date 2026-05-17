@@ -1,231 +1,172 @@
 # RISC-V Instruction Set Explorer
 
-A comprehensive JavaScript solution for analyzing and cross-referencing RISC-V instruction sets with official documentation.
+A JavaScript solution for the RISC-V Mentorship Coding Challenge — **all three tiers** implemented.
 
-## 📋 Project Overview
+## Features
 
-This project implements a two-tier mentorship coding challenge that explores the RISC-V instruction set architecture through automated parsing and cross-referencing with official documentation by cloning and analyzing real repositories.
-
-## 🎯 Features
-
-### Tier 1: Instruction Set Parsing ✅
-- Clones the [RISC-V Extensions Landscape](https://github.com/rpsene/riscv-extensions-landscape) repository
-- Reads and parses `instr_dict.json` from the cloned repository
-- Groups instructions by their extension tags
-- Generates a summary table with:
-  - Extension tag name
-  - Instruction count per extension
-  - Example mnemonics
-- Identifies and lists instructions belonging to multiple extensions
-
-**Example Output:**
-```
-Extension      | Count | Example Mnemonic
-───────────────┼───────┼──────────────────
-rv_zba         |   4   | SH1ADD
-rv_zbb         |   8   | CLZ
-rv_m           |  12   | MUL
-```
-
-### Tier 2: Cross-Reference with ISA Manual ✅
-- Clones the official [RISC-V ISA Manual](https://github.com/riscv/riscv-isa-manual) repository
-- Scans AsciiDoc source files (`src/`) for extension references
-- Cross-references extensions between:
-  - `instr_dict.json` (from the cloned Extensions Landscape repo)
-  - Official ISA manual documentation (from the cloned manual repo)
-- Handles extension name normalization (e.g., `rv_zba` → `Zba`)
-- Reports:
-  - Extensions in JSON but missing from manual
-  - Extensions in manual but missing from JSON
-  - Match summary statistics
-
-**Example Report:**
-```
-✓ Matched Extensions: 42
-⚠ In JSON Only: 3 (rv_zicsr, rv_zifencei, ...)
-⚠ In Manual Only: 5 (Zk, Zkr, ...)
-```
-
-## 🚀 Quick Start
-
-### Prerequisites
-- **Node.js 14+**
-- **Git** (for cloning required repositories)
-- **Internet connection** (to clone repositories)
-
-### Installation
-
-```bash
-# Clone this repository
-git clone https://github.com/Udhaya-kumar-N/riscv-v-mentorship.git
-cd riscv-v-mentorship
-
-# Install dependencies
-npm install
-```
-
-### Running the Program
-
-```bash
-# Run all tiers
-node main.js
-
-# Run specific tier
-node main.js --tier 1
-node main.js --tier 2
-```
-
-## 📁 Project Structure
-
-```
-riscv-v-mentorship/
-├── README.md                    # This file
-├── package.json                 # Node.js dependencies
-├── main.js                      # Main JavaScript entry point
-├── src/
-│   ├── tier1/
-│   │   ├── parser.js           # Instruction parsing logic
-│   │   └── formatter.js        # Output formatting
-│   └── tier2/
-│       ├── cross_reference.js  # Cross-reference logic
-│       ├── normalizer.js       # Extension name normalization
-│       └── manual_scanner.js   # ISA manual scanning
-└── output/
-    └── results.txt             # Program output
-```
-
-## 🔧 Usage Examples
-
-### Example 1: Parse Instructions and Generate Summary
-```bash
-node main.js
-```
-
-**Output:**
-```
-=== TIER 1: INSTRUCTION SET PARSING ===
-
-Cloning RISC-V Extensions Landscape repository...
-Loading instructions from instr_dict.json...
-Parsed 500+ instructions across 40+ extensions
-
-Extension Summary:
-┌─────────┬───────┬──────────────────┐
-│Extension│ Count │ Example          │
-├─────────┼───────┼──────────────────┤
-│rv_i     │  47   │ ADD              │
-│rv_m     │  12   │ MUL              │
-│rv_zba   │   4   │ SH1ADD           │
-│rv_zbb   │   8   │ CLZ              │
-└─────────┴───────┴──────────────────┘
-
-Multi-Extension Instructions:
-- DEXT (rv_zbp, rv_zbe)
-- DEPR (rv_zbp, rv_zbe)
-```
-
-### Example 2: Cross-Reference with ISA Manual
-```bash
-node main.js --tier 2
-```
-
-**Output:**
-```
-=== TIER 2: CROSS-REFERENCE WITH ISA MANUAL ===
-
-Cloning RISC-V ISA Manual repository...
-Scanning ISA manual sources...
-Found 35 extension references in official documentation
-
-Cross-Reference Report:
-✓ Matched: 34 extensions
-⚠ In instr_dict.json only: 1 (rv_zicsr)
-⚠ In manual only: 3 (Zk, Zkr, Zkg)
-
-Confidence: 94.4% (34/36 matched)
-```
-
-## 🔍 Design Decisions & Assumptions
-
-### Repository Cloning Strategy
-- **Decision**: Clone both RISC-V Extensions Landscape and ISA Manual repositories to local `data/` directory
-- **Advantage**: Ensures consistency across runs, offline capability after initial clone, ability to version control repository snapshots
-- **Handling**: Checks if repositories already exist before cloning, skips clone if directory exists
-
-### Parsing Strategy
-- **Assumption**: `instr_dict.json` follows consistent structure across versions
-- **Decision**: Implemented lazy loading for large datasets to minimize memory footprint
-- **Handling**: Empty or null extension tags are grouped under "untagged"
-
-### Extension Name Normalization
-- **Assumption**: Extension names follow RISC-V naming conventions (e.g., `rv_*` or capitalized)
-- **Decision**: Implemented a normalization mapping to handle variants:
-  - `rv_zba` ↔ `Zba`
-  - `rv_m` ↔ `M`
-  - Case-insensitive matching with fuzzy logic fallback
-- **Handling**: Mismatches logged with confidence scores
-
-### ISA Manual Scanning
-- **Assumption**: Official manual uses AsciiDoc format in `src/` directory
-- **Decision**: Uses regex patterns to identify extension references (e.g., `Zba`, `Extension Zicsr`)
-- **Handling**: Context-aware parsing to reduce false positives
-
-## 📊 Sample Output
-
-### Full Program Run
-```
-===================================================================
-        RISC-V INSTRUCTION SET EXPLORER
-===================================================================
-
-[TIER 1] Instruction Set Parsing
-├─ Status: ✓ COMPLETE
-├─ Repository Cloned: riscv-extensions-landscape
-├─ Instructions Parsed: 512
-├─ Extensions Found: 42
-└─ Multi-Extension Instructions: 8
-
-[TIER 2] Cross-Reference Analysis
-├─ Status: ✓ COMPLETE
-├─ Repository Cloned: riscv-isa-manual
-├─ Manual Extensions Found: 39
-├─ Matched: 38
-├─ JSON Only: 1
-└─ Manual Only: 3
-
-===================================================================
-```
-
-## 🔗 External Resources
-
-- **RISC-V Extensions Landscape**: https://github.com/rpsene/riscv-extensions-landscape
-- **Official RISC-V ISA Manual**: https://github.com/riscv/riscv-isa-manual
-- **RISC-V Foundation**: https://riscv.org/
-
-## 📝 Implementation Notes
-
-### Tier 1 - Parsing
-- Clones the extensions landscape repository to `data/riscv-extensions-landscape/`
-- Uses streaming JSON parser for memory efficiency with large datasets
-- Groups instructions using Map and Set data structures
-- Handles edge cases: missing tags, null values, duplicates
-
-### Tier 2 - Cross-Reference
-- Clones the ISA manual repository to `data/riscv-isa-manual/`
-- Implements fuzzy matching for extension name variants
-- Builds bidirectional reference maps
-- Generates confidence scores for matches
-- Provides detailed mismatch analysis
-
-## 📄 License
-
-This project is open source and available under the MIT License. See LICENSE file for details.
-
-## ✉️ Contact & Support
-
-For questions or issues, please open a GitHub Issue in this repository.
+| Tier | Description |
+|------|-------------|
+| **Tier 1** | Parse `instr_dict.json`, group instructions by extension, print summary table, list multi-extension instructions |
+| **Tier 2** | Scan ISA manual AsciiDoc sources, normalize extension names (`rv_zba` ↔ `Zba`), cross-reference and report matches/mismatches |
+| **Tier 3** | Unit tests (plain Node.js, no framework), interactive vis.js extension-sharing graph, text-based adjacency output |
 
 ---
 
-**Last Updated**: 2026-05-17  
-**Status**: ✅ Two Tiers Complete
+## Prerequisites
+
+- **Node.js 14+**
+- **Git**
+
+---
+
+## Installation
+
+```bash
+git clone https://github.com/Udhaya-kumar-N/riscv-v-mentorship.git
+cd riscv-v-mentorship
+# No external npm dependencies required — pure Node.js
+```
+
+---
+
+## Setup: ISA Manual Sources (required for Tier 2)
+
+```bash
+git clone https://github.com/riscv/riscv-isa-manual
+mkdir -p data
+cp -r riscv-isa-manual/src data/
+```
+
+---
+
+## Running
+
+```bash
+# Run all tiers with defaults
+node src/index.js
+
+# Custom paths
+node src/index.js --instr ./instr_dict.json --isa-src ./data/src --graph-out ./output/extension-graph.html
+```
+
+After running, open `output/extension-graph.html` in a browser for the interactive graph.
+
+---
+
+## Run Tests
+
+```bash
+npm test
+# or
+node tests/parser.test.js
+```
+
+---
+
+## Sample Output
+
+```
+Loading: ./instr_dict.json
+  → Parsed 1188 instructions across 114 extensions
+
+==============================================================
+  TIER 1 — Extension Summary Table
+==============================================================
+Extension                      Count  Example Mnemonic
+rv_v                             627  VAADD_VV
+rv_i                              37  ADD
+rv_q                              30  FADD_Q
+rv_d                              26  FADD_D
+...
+
+==============================================================
+  TIER 1 — Multi-Extension Instructions (73 total)
+==============================================================
+  aes32dsi    rv32_zknd, rv32_zk, rv32_zkn
+  andn        rv_zbb, rv_zkn, rv_zks, rv_zk, rv_zbkb
+  clmul       rv_zbc, rv_zkn, rv_zks, rv_zk, rv_zbkc
+  ...
+
+==============================================================
+  TIER 2 — Cross-Reference: instr_dict.json vs ISA Manual
+==============================================================
+  49 matched, 36 in JSON only, 62 in manual only
+
+── Extensions in JSON but NOT in ISA manual (36) ──
+  rv_zalasr    (8 instrs)
+  rv_zibi      (2 instrs)
+  ...
+
+── Extensions in ISA manual but NOT in JSON (62) ──
+  smcdeleg
+  svnapot
+  zmmul
+  ...
+
+── Matched extensions (49) ──
+  a   c   d   f   i   m   q   v
+  zba zbb zbc zbkb zbkc zbkx zbs
+  zicsr zifencei zicond ...
+
+==============================================================
+  TIER 3 — Extension Sharing Graph (text)
+==============================================================
+  rv_zbb  ── rv_zkn(5), rv_zks(5), rv_zk(5), rv_zbkb(5)
+  rv_zvkn ── rv_zvkned(11), rv_zvknha(3), rv_zvknhb(3)
+  ...
+  Total edges: 57
+
+  ✅ Interactive graph saved to: output/extension-graph.html
+
+✅ Done.
+```
+
+---
+
+## Project Structure
+
+```
+riscv-v-mentorship/
+├── instr_dict.json              ← source instruction data
+├── data/
+│   └── src/                    ← ISA manual adoc files (clone separately, see Setup)
+├── src/
+│   ├── index.js                ← entry point (runs all tiers)
+│   ├── parser.js               ← Tier 1: parse & group instructions
+│   ├── crossref.js             ← Tier 2: adoc scan & cross-reference
+│   └── graph.js                ← Tier 3: text graph + vis.js HTML graph
+├── tests/
+│   └── parser.test.js          ← Tier 3: unit tests (plain Node.js)
+├── output/
+│   └── extension-graph.html    ← generated at runtime
+└── package.json
+```
+
+---
+
+## Design Decisions
+
+- **Normalization**: JSON extensions use `rv[32|64]_<name>` format; manual uses capitalized `Zba`/`Zicsr` style. Both sides are stripped to bare lowercase (e.g., `rv64_zba` → `zba`, `Zba` → `zba`) for comparison.
+- **Composite extension keys**: Names like `rv_zfh_zfa` (combining two sub-extensions) are treated as a single JSON-only entry since no exact manual equivalent exists.
+- **adoc scanning**: Uses both filename-based detection (reliable) and regex content scanning (for mentions inside documents) to maximize recall while filtering common English words.
+- **Graph edges**: Two extensions are connected if they share ≥1 instruction. Edge weight equals the count of shared instructions.
+- **No external dependencies**: All logic uses only Node.js built-ins (`fs`, `path`, `assert`). The graph HTML uses vis-network via CDN.
+
+---
+
+## External Resources
+
+- [RISC-V Extensions Landscape](https://github.com/rpsene/riscv-extensions-landscape)
+- [Official RISC-V ISA Manual](https://github.com/riscv/riscv-isa-manual)
+- [RISC-V Foundation](https://riscv.org/)
+
+---
+
+## License
+
+MIT — see [LICENSE](LICENSE)
+
+---
+
+**Status**: ✅ All Three Tiers Complete  
+**Last Updated**: 2026-05-17
