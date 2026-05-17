@@ -1,0 +1,13 @@
+{
+  "name": "riscv-instruction-set-explorer",
+  "version": "1.0.0",
+  "description": "RISC-V Mentorship Challenge — Instruction Set Explorer (All Tiers)",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "start:custom": "node src/index.js --instr ./instr_dict.json --isa-src ./data/src --graph-out ./output/extension-graph.html",
+    "test": "node tests/parser.test.js"
+  },
+  "keywords": ["riscv", "isa", "instruction-set", "extensions"],
+  "license": "MIT"
+}
