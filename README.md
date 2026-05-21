@@ -45,7 +45,7 @@ cp -r riscv-isa-manual/src data/
 node src/index.js
 
 # Custom paths
-node src/index.js --instr ./instr_dict.json --isa-src ./data/src
+node src/index.js --instr ./data/instr_dict.json --isa-src ./data/src
 ```
 
 ---
@@ -53,7 +53,7 @@ node src/index.js --instr ./instr_dict.json --isa-src ./data/src
 ## Sample Output
 
 ```
-Loading: ./instr_dict.json
+Loading: ./data/instr_dict.json
   → Parsed 1188 instructions across 114 extensions
 
 ==============================================================
@@ -104,9 +104,18 @@ rv_d                              26  FADD_D
 
 ```
 riscv-v-mentorship/
-├── instr_dict.json              ← source instruction data
 ├── data/
-│   └── src/                    ← ISA manual adoc files (clone separately, see Setup)
+│   ├── instr_dict.json         ← source instruction data
+│   ├── src/                    ← ISA manual adoc files (clone separately, see Setup)
+│   ├── bibliography.adoc
+│   ├── contributors.adoc
+│   ├── docinfo-header.html
+│   ├── docinfo.html
+│   ├── index.adoc
+│   ├── license.adoc
+│   ├── riscv-spec.adoc
+│   ├── svgnam.def
+│   └── symbols.adoc
 ├── src/
 │   ├── index.js                ← entry point (runs Tier 1 & Tier 2)
 │   ├── parser.js               ← Tier 1: parse & group instructions
@@ -118,7 +127,7 @@ riscv-v-mentorship/
 
 ## Design Decisions
 
-- **Normalization**: JSON extensions use `rv[32|64]_<name>` format; manual uses capitalized `Zba`/`Zicsr` style. Both sides are stripped to bare lowercase (e.g., `rv64_zba` → `zba`, `Zba` → `zba`) for comparison.
+- **Normalization**: JSON extensions use `rv[32|64]_<name>` format; manual uses capitalized `Zba`/`Zicsr` style. Both sides are stripped to bare lowercase (e.g., `rv64_zba` → `zba`, `Zba` → `[...]
 - **Composite extension keys**: Names like `rv_zfh_zfa` (combining two sub-extensions) are treated as a single JSON-only entry since no exact manual equivalent exists.
 - **adoc scanning**: Uses both filename-based detection (reliable) and regex content scanning (for mentions inside documents) to maximize recall while filtering common English words.
 - **No external dependencies**: All logic uses only Node.js built-ins (`fs`, `path`).
@@ -140,4 +149,4 @@ MIT — see [LICENSE](LICENSE)
 ---
 
 **Status**: ✅ Tier 1 & Tier 2 Complete  
-**Last Updated**: 2026-05-17
+**Last Updated**: 2026-05-21
