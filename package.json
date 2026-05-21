@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "start:custom": "node src/index.js --instr ./instr_dict.json --isa-src ./data/src"
+    "start:custom": "node src/index.js --instr ./data/instr_dict.json --isa-src ./data/src"
   },
   "keywords": ["riscv", "isa", "instruction-set", "extensions"],
   "license": "MIT"
